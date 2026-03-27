@@ -1,0 +1,35 @@
+resources:
+  jobs:
+    gold_pipeline:
+      name: gold_pipeline
+      tasks:
+        - task_key: fact_generation
+          notebook_task:
+            notebook_path: /Repos/nidharsanv.22cse@kongu.edu/olist_DE_MiniProject/notebooks/03_gold/fact_conversion
+            source: WORKSPACE
+        - task_key: dim_generation
+          notebook_task:
+            notebook_path: /Repos/nidharsanv.22cse@kongu.edu/olist_DE_MiniProject/notebooks/03_gold/dim_conversion
+            source: WORKSPACE
+        - task_key: data_cube_generation
+          depends_on:
+            - task_key: dim_generation
+            - task_key: fact_generation
+          notebook_task:
+            notebook_path: /Repos/nidharsanv.22cse@kongu.edu/olist_DE_MiniProject/notebooks/03_gold/Olist_Data_Cube
+            source: WORKSPACE
+        - task_key: KPI_data_cube
+          depends_on:
+            - task_key: data_cube_generation
+          notebook_task:
+            notebook_path: /Repos/nidharsanv.22cse@kongu.edu/olist_DE_MiniProject/notebooks/03_gold/KPI_generation_data_cube
+            source: WORKSPACE
+        - task_key: KPI_fact_dim
+          depends_on:
+            - task_key: data_cube_generation
+          notebook_task:
+            notebook_path: /Repos/nidharsanv.22cse@kongu.edu/olist_DE_MiniProject/notebooks/03_gold/KPI_generation_fact_dim
+            source: WORKSPACE
+      queue:
+        enabled: true
+      performance_target: PERFORMANCE_OPTIMIZED

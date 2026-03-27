@@ -1,0 +1,12 @@
+resources:
+  jobs:
+    bronze_pipeline:
+      name: bronze_pipeline
+      tasks:
+        - task_key: ingest_rawvolume_bronze
+          notebook_task:
+            notebook_path: /Repos/nidharsanv.22cse@kongu.edu/olist_DE_MiniProject/notebooks/01_bronze/ingestion_bronze_all_tables
+            source: WORKSPACE
+      queue:
+        enabled: true
+      performance_target: PERFORMANCE_OPTIMIZED
