@@ -1,0 +1,42 @@
+resources:
+  jobs:
+    master_pipeline:
+      name: master_pipeline
+      tasks:
+        - task_key: Ingestion_pipeline
+          run_job_task:
+            job_id: 549540408066999
+        - task_key: Bronze_Pipeline
+          depends_on:
+            - task_key: Ingestion_pipeline
+          run_job_task:
+            job_id: 1108771240589989
+        - task_key: Silver_Pipeline
+          depends_on:
+            - task_key: Bronze_Pipeline
+          run_job_task:
+            job_id: 830141210313148
+        - task_key: Gold_Pipeline
+          depends_on:
+            - task_key: Silver_Pipeline
+          run_job_task:
+            job_id: 555346473430098
+        - task_key: PowerBI
+          depends_on:
+            - task_key: Gold_Pipeline
+          power_bi_task:
+            tables:
+              - catalog: ecommerce_dev
+                schema: kpi
+                storage_mode: DIRECT_QUERY
+            warehouse_id: ae41d59802ca0db8
+            power_bi_model:
+              workspace_name: miniproject
+              model_name: ecommerce_dev-kpi
+              storage_mode: DIRECT_QUERY
+              authentication_method: OAUTH
+              overwrite_existing: false
+            connection_resource_name: powerbi_conn
+            refresh_after_update: false
+      queue:
+        enabled: true

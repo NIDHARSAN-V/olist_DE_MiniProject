@@ -1,0 +1,24 @@
+resources:
+  jobs:
+    Ingestion_s3_rawvolume:
+      name: Ingestion_s3_rawvolume
+      tasks:
+        - task_key: catalog_creation
+          notebook_task:
+            notebook_path: /Repos/nidharsanv.22cse@kongu.edu/olist_DE_MiniProject/notebooks/setup/create_catalog
+            source: WORKSPACE
+        - task_key: volume_creation
+          depends_on:
+            - task_key: catalog_creation
+          notebook_task:
+            notebook_path: /Repos/nidharsanv.22cse@kongu.edu/olist_DE_MiniProject/notebooks/setup/create_volume
+            source: WORKSPACE
+        - task_key: load_from_s3
+          depends_on:
+            - task_key: volume_creation
+          notebook_task:
+            notebook_path: /Repos/nidharsanv.22cse@kongu.edu/olist_DE_MiniProject/notebooks/setup/load_from_s3_volumes
+            source: WORKSPACE
+      queue:
+        enabled: true
+      performance_target: PERFORMANCE_OPTIMIZED

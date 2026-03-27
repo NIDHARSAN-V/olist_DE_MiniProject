@@ -1,0 +1,18 @@
+resources:
+  jobs:
+    silver_pipeline:
+      name: silver_pipeline
+      tasks:
+        - task_key: Basic_Cleaning
+          notebook_task:
+            notebook_path: /Repos/nidharsanv.22cse@kongu.edu/olist_DE_MiniProject/notebooks/02_silver/clean_all_tables
+            source: WORKSPACE
+        - task_key: Enhanced_Transformation
+          depends_on:
+            - task_key: Basic_Cleaning
+          notebook_task:
+            notebook_path: /Repos/nidharsanv.22cse@kongu.edu/olist_DE_MiniProject/notebooks/02_silver/final_enhanced
+            source: WORKSPACE
+      queue:
+        enabled: true
+      performance_target: PERFORMANCE_OPTIMIZED
